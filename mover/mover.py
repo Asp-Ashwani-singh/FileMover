@@ -42,12 +42,16 @@ class FileMover:
                 return os.path.join(self.constant.failed_dir, moving_folder)
         d_final_file_path = get_destination_path(success)
         s_final_file_path = os.path.join(self.constant.processing_dir, file_name)
-        shutil.move(s_final_file_path, d_final_file_path)
-
-
+        try:
+            shutil.move(s_final_file_path, d_final_file_path)
+            print('File successfully moved',file_name)
+        except:
+            print('File failed to move',file_name)
+        
 
     def moving(self):
-        print(len(os.listdir(self.constant.processing_dir)))
+        total_files = len(os.listdir(self.constant.processing_dir))
+        print('Total number of files : ',total_files)
         for file_name in os.listdir(self.constant.processing_dir):
             s_file_path = os.path.join(self.constant.processing_dir, file_name)
             folder_exists = get_file_info(s_file_path, t_type='m')
@@ -55,6 +59,9 @@ class FileMover:
                 is_created = self.is_dir_not_exists_create(str(folder_exists))
                 if is_created:
                     self.file_move(str(folder_exists), file_name,success=True)
+                else:
+                    print('Failed When we creating directory')
+              
 
 
 
